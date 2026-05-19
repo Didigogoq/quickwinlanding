@@ -585,6 +585,28 @@
   .footer-links a:hover { color: var(--yellow); }
   .footer-copy { font-size: 12px; color: #333; }
 
+  /* COPY BUTTON */
+  .copy-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--sub); font-size: 11px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 5px 10px; cursor: pointer;
+    transition: all 0.2s; font-family: 'Montserrat', sans-serif;
+    white-space: nowrap;
+  }
+  .copy-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+  .copy-btn.copied { border-color: #2ECC71 !important; color: #2ECC71 !important; }
+  .tg-row { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: #2ECC71; color: #000; font-size: 13px; font-weight: 700;
+    letter-spacing: 1px; padding: 12px 24px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    opacity: 0; transition: all 0.3s; z-index: 9999; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
   /* REVEAL */
   .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -629,7 +651,10 @@
     <li><a href="#analytics">Аналитика</a></li>
     <li><a href="#price">Цена</a></li>
   </ul>
-  <a href="https://t.me/quickw1nbot" target="_blank" class="nav-cta">Купить</a>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <a href="https://t.me/quickw1nbot" target="_blank" class="nav-cta">Купить</a>
+    <button class="copy-btn" onclick="copyTg('@quickw1nbot')">📋 @quickw1nbot</button>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -645,6 +670,7 @@
     <div class="hero-actions">
       <a href="https://t.me/quickw1nbot" target="_blank" class="btn-primary">⚡ Получить доступ</a>
       <a href="#analytics" class="btn-secondary">📊 Аналитика</a>
+      <button class="copy-btn" onclick="copyTg('@quickw1nbot')" style="align-self:center;">📋 Скопировать ник</button>
     </div>
     <div class="hero-stats">
       <div class="stat-item"><div class="stat-num">10+</div><div class="stat-label">Игр</div></div>
@@ -1169,6 +1195,8 @@
     <div class="cta-actions">
       <a href="https://t.me/quickw1nbot" target="_blank" class="btn-primary">⚡ Купить — 3500₽</a>
       <a href="https://t.me/quickw1ns" target="_blank" class="btn-secondary">💬 Поддержка</a>
+      <button class="copy-btn" onclick="copyTg('@quickw1nbot')" style="align-self:center;">📋 @quickw1nbot</button>
+      <button class="copy-btn" onclick="copyTg('@quickw1ns')" style="align-self:center;">📋 @quickw1ns</button>
     </div>
   </div>
 </section>
@@ -1177,18 +1205,29 @@
 <footer>
   <div class="footer-logo">⚡ QUICKWIN</div>
   <ul class="footer-links">
-    <li><a href="https://t.me/quickw1nbot" target="_blank">🤖 Бот</a></li>
-    <li><a href="https://t.me/faqquickwin" target="_blank">📖 Канал</a></li>
-    <li><a href="https://t.me/quickw1ns" target="_blank">💬 Поддержка</a></li>
+    <li><a href="https://t.me/quickw1nbot" target="_blank">🤖 Бот</a> <button class="copy-btn" onclick="copyTg('@quickw1nbot')">📋</button></li>
+    <li><a href="https://t.me/faqquickwin" target="_blank">📖 Канал</a> <button class="copy-btn" onclick="copyTg('@faqquickwin')">📋</button></li>
+    <li><a href="https://t.me/quickw1ns" target="_blank">💬 Поддержка</a> <button class="copy-btn" onclick="copyTg('@quickw1ns')">📋</button></li>
   </ul>
   <div class="footer-copy">© 2026 QuickWin</div>
 </footer>
+
+<div class="toast" id="toast">✓ Скопировано</div>
 
 <script>
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  function copyTg(handle) {
+    navigator.clipboard.writeText(handle).then(() => {
+      const toast = document.getElementById('toast');
+      toast.textContent = '✓ Скопировано: ' + handle;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    });
+  }
 </script>
 </body>
 </html>
